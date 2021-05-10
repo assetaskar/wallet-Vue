@@ -1,0 +1,168 @@
+<template>
+  <div class="home">
+    <md-toolbar class="md-transparent">
+      <md-tabs style="flex: 1" :md-active-tab="'tab-' + tabs">
+        <md-tab
+          id="tab-expenses"
+          md-label="Расходы"
+          @click="setTabs('expenses')"
+        ></md-tab>
+        <md-tab
+          id="tab-incomes"
+          md-label="Доходы"
+          @click="setTabs('incomes')"
+        ></md-tab>
+      </md-tabs>
+      <div class="md-toolbar-section-end">
+        <simple-select
+          name="Фильтры: "
+          id="filter"
+          :options="filters"
+          v-model="v_filter"
+        ></simple-select>
+        <!-- <md-field class="filter-width">
+          <label for="filter">Фильтры</label>
+          <md-select v-model="v_filter" name="filter" id="filter">
+            <md-option value="today">Сегодня</md-option>
+            <md-option value="week">За эту неделю</md-option>
+            <md-option value="month">За этот месяц</md-option>
+            <md-option value="year">За этот год</md-option>
+          </md-select>
+        </md-field> -->
+      </div>
+    </md-toolbar>
+    <transition name="fade" mode="out-in">
+      <div
+        class="md-layout"
+        v-if="!Object.keys(dataCollectionForBar).length"
+        key="empty"
+      >
+        <div class="md-layout-item mb">
+          <md-content class="md-elevation-5">
+            <md-empty-state
+              md-icon="stacked_line_chart"
+              :md-label="message"
+              md-description="..."
+            ></md-empty-state>
+          </md-content>
+        </div>
+      </div>
+      <div class="md-layout md-gutter mb" v-else key="chart">
+        <div class="md-layout-item">
+          <md-content class="md-elevation-5">
+            <chart-doughnut
+              :chart-data="dataCollectionForDoughnut"
+            ></chart-doughnut>
+          </md-content>
+        </div>
+        <div class="md-layout-item">
+          <md-content class="md-elevation-5">
+            <chart-bar :chart-data="dataCollectionForBar"></chart-bar>
+          </md-content>
+        </div>
+      </div>
+    </transition>
+    <md-table v-model="getData" class="md-elevation-5">
+      <md-table-row slot="md-table-row" slot-scope="{ item }">
+        <md-table-cell md-label="Категория" md-sort-by="category">
+          {{ item.category }}
+        </md-table-cell>
+        <md-table-cell md-label="Комментарии" md-sort-by="comment">
+          {{ item.comment }}
+        </md-table-cell>
+        <md-table-cell md-label="Дата" md-sort-by="date">
+          {{ item.date | toDateString }}
+        </md-table-cell>
+        <md-table-cell md-label="Сумма" md-sort-by="amount">
+          {{ item.amount }}
+        </md-table-cell>
+      </md-table-row>
+    </md-table>
+  </div>
+</template>
+
+<script>
+import ChartDoughnut from "../components/charts/Doughnut";
+import ChartBar from "../components/charts/Bar";
+import SimpleSelect from "../components/SimpleSelect";
+
+import { mapGetters, mapMutations, mapState } from "vuex";
+
+export default {
+  name: "Home",
+  data() {
+    return {
+      message: "Нет данных",
+      filters: [
+        {
+          value: "today",
+          text: "Сегодня",
+        },
+        {
+          value: "week",
+          text: "За эту неделю",
+        },
+        {
+          value: "month",
+          text: "За этот месяц",
+        },
+        {
+          value: "year",
+          text: "За этот год",
+        },
+      ],
+    };
+  },
+  components: {
+    ChartDoughnut,
+    ChartBar,
+    SimpleSelect,
+  },
+  mounted() {},
+  methods: {
+    ...mapMutations(["setFilter", "setTabs"]),
+  },
+  computed: {
+    ...mapState({
+      filter: (state) => state.filter,
+      tabs: (state) => state.tabs,
+    }),
+    ...mapGetters([
+      "dataCollectionForBar",
+      "dataCollectionForDoughnut",
+      "getData",
+    ]),
+    v_filter: {
+      get() {
+        return this.filter;
+      },
+      set(value) {
+        this.setFilter(value);
+      },
+    },
+  },
+  filters: {
+    toDateString: function (value) {
+      if (!value) return "";
+      value = value.toString();
+      return new Date(Date.parse(value)).toLocaleDateString();
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.home {
+  margin: 0 3px;
+}
+.mb,
+.md-toolbar {
+  margin-bottom: clamp(8px, 2vw, 48px);
+}
+.filter-width {
+  width: 250px;
+}
+.md-content {
+  height: 100%;
+}
+</style>
