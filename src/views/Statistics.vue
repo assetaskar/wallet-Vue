@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <md-toolbar class="md-transparent">
-      <md-tabs style="flex: 1" :md-active-tab="'tab-' + tabs">
+    <md-toolbar class="md-transparent mb">
+      <md-tabs :md-active-tab="'tab-' + tabs">
         <md-tab
           id="tab-expenses"
           md-label="Расходы"
@@ -15,20 +15,11 @@
       </md-tabs>
       <div class="md-toolbar-section-end">
         <simple-select
-          name="Фильтры: "
+          name="Фильтры:"
           id="filter"
           :options="filters"
           v-model="v_filter"
         ></simple-select>
-        <!-- <md-field class="filter-width">
-          <label for="filter">Фильтры</label>
-          <md-select v-model="v_filter" name="filter" id="filter">
-            <md-option value="today">Сегодня</md-option>
-            <md-option value="week">За эту неделю</md-option>
-            <md-option value="month">За этот месяц</md-option>
-            <md-option value="year">За этот год</md-option>
-          </md-select>
-        </md-field> -->
       </div>
     </md-toolbar>
     <transition name="fade" mode="out-in">
@@ -89,7 +80,7 @@ import SimpleSelect from "../components/SimpleSelect";
 import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default {
-  name: "Home",
+  name: "MainStatistics",
   data() {
     return {
       message: "Нет данных",
@@ -155,13 +146,11 @@ export default {
 .home {
   margin: 0 3px;
 }
-.mb,
-.md-toolbar {
+
+.mb {
   margin-bottom: clamp(8px, 2vw, 48px);
 }
-.filter-width {
-  width: 250px;
-}
+
 .md-content {
   height: 100%;
 }
