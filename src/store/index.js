@@ -1,46 +1,19 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
 import expenses from "./modules/expenses";
 import incomes from "./modules/incomes";
+
+import getStartDayWeek from "../utils/getStartDayWeek";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		date: new Date()
-			.toLocaleDateString()
-			.match(/\d+/g)
-			.reverse()
-			.map((date, index) =>
-				index == 1 ? (date - 1 < 10 ? `0${date - 1}` : `${date - 1}`) : date
-			)
-			.join("."),
 		tabs: "expenses",
 		filter: "today",
-		startDayWeek: () => {
-			let startDayWeek = new Date();
-			const dayWeek = new Date().getDay();
-			dayWeek !== 0
-				? startDayWeek.setDate(startDayWeek.getDate() - dayWeek + 1)
-				: startDayWeek.setDate(startDayWeek.getDate() - 6);
-			startDayWeek = new Date(startDayWeek.setHours(0, 0, 0, 0)).toJSON();
-			startDayWeek = Date.parse(startDayWeek);
-			return startDayWeek;
-		},
 	},
-	mutations: {
-		setFilter(state, value) {
-			state.filter = value;
-		},
-		setTabs(state, value) {
-			state.tabs = value;
-		},
-	},
-	actions: {},
-	modules: {
-		expenses,
-		incomes,
-	},
+
 	getters: {
 		getData: state => {
 			const data = state[state.tabs].data;
@@ -54,12 +27,10 @@ export default new Vuex.Store({
 					);
 
 				case "week":
-					const startDayWeek = state.startDayWeek();
+					const startDayWeek = getStartDayWeek();
 
 					return data.filter(
-						item =>
-							startDayWeek <= Date.parse(item.date) &&
-							Date.parse(item.date) <= Date.now()
+						item => startDayWeek <= Date.parse(item.date) && Date.parse(item.date) <= Date.now()
 					);
 
 				case "month":
@@ -69,15 +40,14 @@ export default new Vuex.Store({
 
 				case "year":
 					return data.filter(
-						item =>
-							new Date().getFullYear() ===
-							new Date(Date.parse(item.date)).getFullYear()
+						item => new Date().getFullYear() === new Date(Date.parse(item.date)).getFullYear()
 					);
 
 				default:
 					return [];
 			}
 		},
+
 		dataCollectionForBar: (state, getters) => {
 			if (getters.getData.length) {
 				let labels = [],
@@ -100,7 +70,7 @@ export default new Vuex.Store({
 						break;
 
 					case "week":
-						let startDayWeek = state.startDayWeek();
+						let startDayWeek = getStartDayWeek();
 
 						for (let i = 0; i < 7; i++) {
 							labels[i] = new Date(startDayWeek).toLocaleDateString();
@@ -109,9 +79,7 @@ export default new Vuex.Store({
 						}
 
 						getters.getData.forEach(el => {
-							const index = labels.indexOf(
-								new Date(Date.parse(el.date)).toLocaleDateString()
-							);
+							const index = labels.indexOf(new Date(Date.parse(el.date)).toLocaleDateString());
 							data[index] += el.amount;
 						});
 						break;
@@ -119,9 +87,7 @@ export default new Vuex.Store({
 					case "month":
 						({ labels, data } = getters.getData.reduce(
 							(obj, cur) => {
-								obj.labels.push(
-									new Date(Date.parse(cur.date)).toLocaleDateString()
-								);
+								obj.labels.push(new Date(Date.parse(cur.date)).toLocaleDateString());
 								obj.data.push(cur.amount);
 
 								return obj;
@@ -160,6 +126,7 @@ export default new Vuex.Store({
 
 			return {};
 		},
+
 		dataCollectionForDoughnut: (state, getters) => {
 			if (getters.getData.length) {
 				let { labels, data, colors } = getters.getData.reduce(
@@ -201,5 +168,19 @@ export default new Vuex.Store({
 
 			return {};
 		},
+	},
+
+	mutations: {
+		setFilter(state, value) {
+			state.filter = value;
+		},
+		setTabs(state, value) {
+			state.tabs = value;
+		},
+	},
+
+	modules: {
+		expenses,
+		incomes,
 	},
 });
