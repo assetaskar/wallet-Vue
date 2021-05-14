@@ -12,6 +12,15 @@ const routes = [
 		path: "/",
 		name: "auth",
 		component: Auth,
+		beforeEnter: (to, from, next) => {
+			console.log(localStorage.getItem("activeUserID"));
+			localStorage.getItem("activeUserID")
+				? next({
+						name: "statistics",
+						params: { userId: localStorage.getItem("activeUserID") },
+				  })
+				: next();
+		},
 	},
 	{
 		path: "/:userId",
