@@ -13,11 +13,11 @@ const routes = [
 		name: "auth",
 		component: Auth,
 		beforeEnter: (to, from, next) => {
-			console.log(localStorage.getItem("activeUserID"));
-			localStorage.getItem("activeUserID")
+			localStorage.getItem("activeUserId")
 				? next({
+						replace: true,
 						name: "statistics",
-						params: { userId: localStorage.getItem("activeUserID") },
+						params: { userId: localStorage.getItem("activeUserId") },
 				  })
 				: next();
 		},
@@ -25,6 +25,24 @@ const routes = [
 	{
 		path: "/:userId",
 		component: LayoutMain,
+		beforeEnter: (to, from, next) => {
+			if (!localStorage.getItem("activeUserId")) {
+				next({
+					replace: true,
+					name: "auth",
+				});
+			} else if (localStorage.getItem("activeUserId") !== to.params.userId) {
+				next({
+					replace: true,
+					name: "statistics",
+					params: {
+						userId: localStorage.getItem("activeUserId"),
+					},
+				});
+			} else {
+				next();
+			}
+		},
 		children: [
 			{
 				path: "",
@@ -37,6 +55,12 @@ const routes = [
 				component: Settings,
 			},
 		],
+	},
+	{
+		path: "*",
+		redirect: {
+			name: "auth",
+		},
 	},
 ];
 
