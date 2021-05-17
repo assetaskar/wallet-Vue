@@ -32,4 +32,10 @@ export default {
 			},
 		],
 	},
+
+	getters: {
+		totalIncomes(state) {
+			return state.data.reduce((acc, cur) => acc + cur.amount, 0);
+		},
+	},
 };

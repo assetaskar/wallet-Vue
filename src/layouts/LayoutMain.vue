@@ -17,7 +17,7 @@
         v-if="!menuVisible"
       >
         <md-icon>attach_money</md-icon>
-        <span>100000</span>
+        <span>{{ total }}</span>
       </span>
       <div class="md-toolbar-section-end">{{ user.name }}</div>
     </md-app-toolbar>
@@ -29,7 +29,7 @@
       <md-toolbar md-elevation="0">
         <span class="md-title">
           <md-icon>attach_money</md-icon>
-          <span>100000</span>
+          <span>{{ total }}</span>
         </span>
         <div class="md-toolbar-section-end">
           <md-button
@@ -87,6 +87,7 @@ export default {
   computed: {
     ...mapGetters({
       user: "users/getActiveUserData",
+      total: "total",
     }),
   },
 

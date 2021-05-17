@@ -105,5 +105,12 @@ export default {
 			},
 		],
 	},
+
+	getters: {
+		totalExpenses(state) {
+			return state.data.reduce((acc, cur) => acc + cur.amount, 0);
+		},
+	},
+
 	mutations: {},
 };
