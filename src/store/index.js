@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import expenses from "./modules/expenses";
 import incomes from "./modules/incomes";
+import users from "./modules/users";
 
 import getStartDayWeek from "../utils/getStartDayWeek";
 
@@ -182,5 +183,6 @@ export default new Vuex.Store({
 	modules: {
 		expenses,
 		incomes,
+		users,
 	},
 });
