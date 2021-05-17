@@ -46,7 +46,7 @@
               class="md-inset"
               v-for="user of users"
               :key="user.id"
-              @click="signIn(user.id)"
+              @click="login(user.id)"
             >
               {{ user.name }}
             </md-list-item>
@@ -113,7 +113,7 @@ export default {
         },
       });
     },
-    signIn(id) {
+    login(id) {
       localStorage.setItem("activeUserId", id);
       this.$router.push({
         name: "statistics",
