@@ -19,7 +19,7 @@
         <md-icon>attach_money</md-icon>
         <span>100000</span>
       </span>
-      <div class="md-toolbar-section-end">User Name</div>
+      <div class="md-toolbar-section-end">{{ user.name }}</div>
     </md-app-toolbar>
 
     <md-app-drawer
@@ -74,6 +74,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
@@ -81,6 +83,13 @@ export default {
       id: 123,
     };
   },
+
+  computed: {
+    ...mapGetters({
+      user: "users/getActiveUserData",
+    }),
+  },
+
   methods: {
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
