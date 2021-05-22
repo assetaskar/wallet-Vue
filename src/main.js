@@ -4,12 +4,15 @@ import router from "./router";
 import store from "./store";
 
 import { Chart } from "chart.js";
+import filterDateFormat from "./utils/filterDateFormat";
 
 import VueMaterial from "vue-material";
 import "vue-material/dist/vue-material.min.css";
 
 Chart.defaults.global.defaultFontColor = "white";
 Chart.defaults.global.legend.labels.fontSize = 14;
+
+Vue.filter("toLocaleDateString", filterDateFormat);
 
 Vue.use(VueMaterial);
 
