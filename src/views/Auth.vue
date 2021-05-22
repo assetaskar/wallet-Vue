@@ -3,7 +3,7 @@
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-title>Регистрация</md-dialog-title>
 
-      <form @submit.prevent="register">
+      <form @submit.prevent="validate">
         <md-card-content>
           <md-field :class="{ 'md-invalid': nameInvalid }">
             <label>Имя</label>
@@ -85,14 +85,14 @@ export default {
       ADD_USER: "users/ADD_USER",
     }),
 
-    register() {
+    validate() {
       this.nameInvalid = false;
 
       if (this.name.trim() === "") this.nameInvalid = true;
 
-      !this.nameInvalid && this.addUser();
+      !this.nameInvalid && this.registerNewUser();
     },
-    addUser() {
+    registerNewUser() {
       const user = {
         id: Date.now().toString(),
         name: this.name.trim(),
