@@ -1,4 +1,4 @@
-const getStartDayWeek = () => () => {
+const getStartDayWeek = () => {
 	let startDayWeek = new Date();
 
 	const dayWeek = new Date().getDay();
