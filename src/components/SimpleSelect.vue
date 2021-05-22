@@ -1,6 +1,10 @@
 <template>
   <div class="wrap">
-    <label :for="id">{{ name }}</label>
+    <label
+      class="label"
+      v-if="name !== ''"
+      :for="id"
+    >{{ name }}:</label>
 
     <select
       :id="id"
@@ -44,7 +48,6 @@ export default {
 
 <style lang="scss" scoped>
 .select {
-  margin-left: 1em;
   padding: 0.5em 2em 0.5em 1em;
   font-size: 1rem;
   font-family: inherit;
@@ -55,6 +58,7 @@ export default {
   -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
+  flex-grow: 1;
 
   &__option {
     background-color: #424242;
@@ -67,6 +71,8 @@ export default {
 
 .wrap {
   position: relative;
+  display: flex;
+  align-items: center;
 
   &::after {
     position: absolute;
@@ -79,6 +85,10 @@ export default {
     border-color: #c3c3c3 transparent transparent transparent;
     border-style: solid;
     pointer-events: none;
+  }
+
+  .label {
+    margin-right: 1em;
   }
 }
 </style>
