@@ -88,8 +88,15 @@ export default new Vuex.Store({
 					case "month":
 						({ labels, data } = getters.getData.reduce(
 							(obj, cur) => {
-								obj.labels.push(new Date(Date.parse(cur.date)).toLocaleDateString());
-								obj.data.push(cur.amount);
+								const date = new Date(Date.parse(cur.date)).toLocaleDateString();
+								const index = obj.labels.indexOf(date);
+
+								if (~index) {
+									obj.data[index] += cur.amount;
+								} else {
+									obj.labels.push(new Date(Date.parse(cur.date)).toLocaleDateString());
+									obj.data.push(cur.amount);
+								}
 
 								return obj;
 							},
@@ -177,14 +184,26 @@ export default new Vuex.Store({
 
 			return startAmount + incomes - expenses;
 		},
+
+		getCategories(state) {
+			return state[state.tabs].categories.map(category => {
+				return {
+					value: category.name,
+					text: category.name,
+				};
+			});
+		},
 	},
 
 	mutations: {
-		setFilter(state, value) {
+		SET_FILTER(state, value) {
 			state.filter = value;
 		},
-		setTabs(state, value) {
+		SET_TABS(state, value) {
 			state.tabs = value;
+		},
+		ADD_DATA(state, data) {
+			state[state.tabs].data.push(data);
 		},
 	},
 

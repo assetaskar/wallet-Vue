@@ -5,24 +5,27 @@
         <md-tab
           id="tab-expenses"
           md-label="Расходы"
-          @click="setTabs('expenses')"
+          @click="SET_TABS('expenses')"
         ></md-tab>
         <md-tab
           id="tab-incomes"
           md-label="Доходы"
-          @click="setTabs('incomes')"
+          @click="SET_TABS('incomes')"
         ></md-tab>
       </md-tabs>
       <div class="md-toolbar-section-end">
         <simple-select
-          name="Фильтры:"
+          name="Фильтры"
           id="filter"
           :options="filters"
           v-model="v_filter"
         ></simple-select>
       </div>
     </md-toolbar>
-    <transition name="fade" mode="out-in">
+    <transition
+      name="fade"
+      mode="out-in"
+    >
       <div
         class="md-layout"
         v-if="!Object.keys(dataCollectionForBar).length"
@@ -38,12 +41,14 @@
           </md-content>
         </div>
       </div>
-      <div class="md-layout md-gutter mb" v-else key="chart">
+      <div
+        class="md-layout md-gutter mb"
+        v-else
+        key="chart"
+      >
         <div class="md-layout-item">
           <md-content class="md-elevation-5">
-            <chart-doughnut
-              :chart-data="dataCollectionForDoughnut"
-            ></chart-doughnut>
+            <chart-doughnut :chart-data="dataCollectionForDoughnut"></chart-doughnut>
           </md-content>
         </div>
         <div class="md-layout-item">
@@ -53,22 +58,41 @@
         </div>
       </div>
     </transition>
-    <md-table v-model="getData" class="md-elevation-5">
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell md-label="Категория" md-sort-by="category">
+    <md-table
+      v-model="getData"
+      class="md-elevation-5"
+    >
+      <md-table-row
+        slot="md-table-row"
+        slot-scope="{ item }"
+      >
+        <md-table-cell
+          md-label="Категория"
+          md-sort-by="category"
+        >
           {{ item.category }}
         </md-table-cell>
-        <md-table-cell md-label="Комментарии" md-sort-by="comment">
+        <md-table-cell
+          md-label="Комментарии"
+          md-sort-by="comment"
+        >
           {{ item.comment }}
         </md-table-cell>
-        <md-table-cell md-label="Дата" md-sort-by="date">
+        <md-table-cell
+          md-label="Дата"
+          md-sort-by="date"
+        >
           {{ item.date | toDateString }}
         </md-table-cell>
-        <md-table-cell md-label="Сумма" md-sort-by="amount">
+        <md-table-cell
+          md-label="Сумма"
+          md-sort-by="amount"
+        >
           {{ item.amount }}
         </md-table-cell>
       </md-table-row>
     </md-table>
+    <statistic-add-data></statistic-add-data>
   </div>
 </template>
 
@@ -76,11 +100,28 @@
 import ChartDoughnut from "../components/charts/Doughnut";
 import ChartBar from "../components/charts/Bar";
 import SimpleSelect from "../components/SimpleSelect";
+import StatisticAddData from "../components/StatisticAddData";
 
 import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default {
   name: "MainStatistics",
+
+  components: {
+    ChartDoughnut,
+    ChartBar,
+    SimpleSelect,
+    StatisticAddData,
+  },
+
+  filters: {
+    toDateString: function (value) {
+      if (!value) return "";
+      value = value.toString();
+      return new Date(Date.parse(value)).toLocaleDateString();
+    },
+  },
+
   data() {
     return {
       message: "Нет данных",
@@ -104,15 +145,7 @@ export default {
       ],
     };
   },
-  components: {
-    ChartDoughnut,
-    ChartBar,
-    SimpleSelect,
-  },
-  mounted() {},
-  methods: {
-    ...mapMutations(["setFilter", "setTabs"]),
-  },
+
   computed: {
     ...mapState({
       filter: (state) => state.filter,
@@ -123,21 +156,19 @@ export default {
       "dataCollectionForDoughnut",
       "getData",
     ]),
+
     v_filter: {
       get() {
         return this.filter;
       },
       set(value) {
-        this.setFilter(value);
+        this.SET_FILTER(value);
       },
     },
   },
-  filters: {
-    toDateString: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return new Date(Date.parse(value)).toLocaleDateString();
-    },
+
+  methods: {
+    ...mapMutations(["SET_FILTER", "SET_TABS"]),
   },
 };
 </script>

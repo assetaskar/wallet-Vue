@@ -1,22 +1,7 @@
 export default {
 	namespaced: true,
 	state: {
-		data: [
-			{
-				id: 1620217879562,
-				date: "2021-04-30T18:00:00.000Z",
-				category: "Зарплата",
-				amount: 250000,
-				comment: "IT",
-			},
-			{
-				id: 1620217879582,
-				date: "2021-05-02T18:00:00.000Z",
-				category: "Подарок",
-				amount: 50000,
-				comment: "Свадьба",
-			},
-		],
+		data: [],
 		categories: [
 			{
 				name: "Зарплата",
@@ -36,6 +21,12 @@ export default {
 	getters: {
 		totalIncomes(state) {
 			return state.data.reduce((acc, cur) => acc + cur.amount, 0);
+		},
+	},
+
+	mutations: {
+		UPDATE_DATA(state, data) {
+			state.data = data;
 		},
 	},
 };

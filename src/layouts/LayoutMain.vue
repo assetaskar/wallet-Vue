@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -113,21 +113,16 @@ export default {
   },
 
   created() {
-    this.IS_SIGN_IN();
+    this.$store.dispatch("users/updateUserData");
   },
 
   methods: {
-    ...mapMutations({
-      IS_SIGN_IN: "users/IS_SIGN_IN",
-      IS_SIGN_OUT: "users/IS_SIGN_OUT",
-    }),
-
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
     },
     logout() {
       localStorage.removeItem("activeUserId");
-      this.IS_SIGN_OUT();
+      this.$store.commit("users/IS_SIGN_OUT");
       this.$router.push({ name: "auth" });
     },
   },

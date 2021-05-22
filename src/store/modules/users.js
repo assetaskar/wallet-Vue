@@ -23,4 +23,17 @@ export default {
 			state.isSignIn && (state.isSignIn = false);
 		},
 	},
+
+	actions: {
+		updateUserData({ commit }) {
+			const expensesLocalData =
+				JSON.parse(localStorage.getItem(`expenses-${localStorage.getItem("activeUserId")}`)) || [];
+			const incomesLocalData =
+				JSON.parse(localStorage.getItem(`incomes-${localStorage.getItem("activeUserId")}`)) || [];
+			commit("expenses/UPDATE_DATA", expensesLocalData, { root: true });
+			commit("incomes/UPDATE_DATA", incomesLocalData, { root: true });
+
+			commit("IS_SIGN_IN");
+		},
+	},
 };
