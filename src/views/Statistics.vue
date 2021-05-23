@@ -58,41 +58,13 @@
         </div>
       </div>
     </transition>
-    <md-table
-      v-model="getData"
-      class="md-elevation-5"
-    >
-      <md-table-row
-        slot="md-table-row"
-        slot-scope="{ item }"
-      >
-        <md-table-cell
-          md-label="Категория"
-          md-sort-by="category"
-        >
-          {{ item.category }}
-        </md-table-cell>
-        <md-table-cell
-          md-label="Комментарии"
-          md-sort-by="comment"
-        >
-          {{ item.comment }}
-        </md-table-cell>
-        <md-table-cell
-          md-label="Дата"
-          md-sort-by="date"
-        >
-          {{ item.date | toDateString }}
-        </md-table-cell>
-        <md-table-cell
-          md-label="Сумма"
-          md-sort-by="amount"
-        >
-          {{ item.amount }}
-        </md-table-cell>
-      </md-table-row>
-    </md-table>
-    <statistic-add-data></statistic-add-data>
+    <data-table @open-dialog="openDialogEdit"></data-table>
+    <data-add></data-add>
+    <data-edit
+      :show-dialog="showDialogEdit"
+      :id="editId"
+      @show-dialog="closeDialogEdit"
+    ></data-edit>
   </div>
 </template>
 
@@ -100,7 +72,9 @@
 import ChartDoughnut from "../components/charts/Doughnut";
 import ChartBar from "../components/charts/Bar";
 import SimpleSelect from "../components/SimpleSelect";
-import StatisticAddData from "../components/StatisticAddData";
+import DataAdd from "../components/StatisticDataAdd";
+import DataTable from "../components/StatisticDataTable";
+import DataEdit from "../components/StatisticDataEdit";
 
 import { mapGetters, mapMutations, mapState } from "vuex";
 
@@ -111,15 +85,9 @@ export default {
     ChartDoughnut,
     ChartBar,
     SimpleSelect,
-    StatisticAddData,
-  },
-
-  filters: {
-    toDateString: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return new Date(Date.parse(value)).toLocaleDateString();
-    },
+    DataAdd,
+    DataTable,
+    DataEdit,
   },
 
   data() {
@@ -143,6 +111,8 @@ export default {
           text: "За этот год",
         },
       ],
+      editId: null,
+      showDialogEdit: false,
     };
   },
 
@@ -151,11 +121,7 @@ export default {
       filter: (state) => state.filter,
       tabs: (state) => state.tabs,
     }),
-    ...mapGetters([
-      "dataCollectionForBar",
-      "dataCollectionForDoughnut",
-      "getData",
-    ]),
+    ...mapGetters(["dataCollectionForBar", "dataCollectionForDoughnut"]),
 
     v_filter: {
       get() {
@@ -169,6 +135,14 @@ export default {
 
   methods: {
     ...mapMutations(["SET_FILTER", "SET_TABS"]),
+
+    openDialogEdit(id) {
+      this.editId = id;
+      this.showDialogEdit = true;
+    },
+    closeDialogEdit() {
+      this.showDialogEdit = false;
+    },
   },
 };
 </script>

@@ -6,6 +6,7 @@ import incomes from "./modules/incomes";
 import users from "./modules/users";
 
 import getStartDayWeek from "../utils/getStartDayWeek";
+import getUserId from "../utils/getUserId";
 
 Vue.use(Vuex);
 
@@ -204,6 +205,18 @@ export default new Vuex.Store({
 		},
 		ADD_DATA(state, data) {
 			state[state.tabs].data.push(data);
+		},
+		EDIT_DATA(state, value) {
+			const data = state[state.tabs].data.map(function(item) {
+				if (item.id === this.id) {
+					return this;
+				}
+				return item;
+			}, value);
+			const userId = getUserId();
+
+			localStorage.setItem(`${state.tabs}-${userId}`, JSON.stringify(data));
+			state[state.tabs].data = data;
 		},
 	},
 

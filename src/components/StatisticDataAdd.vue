@@ -47,8 +47,8 @@
       <md-dialog-actions>
         <md-button
           class="md-primary"
-          @click="showDialog = false"
-        >Закрыть</md-button>
+          @click="close"
+        >Отмена</md-button>
         <md-button
           class="md-primary"
           @click="save"
@@ -69,7 +69,7 @@ import { mapGetters, mapMutations, mapState } from "vuex";
 import SimpleSelect from "./SimpleSelect.vue";
 
 export default {
-  name: "StatisticsAddData",
+  name: "StatisticDataAdd",
 
   components: { SimpleSelect },
 
@@ -77,7 +77,7 @@ export default {
     showDialog: false,
     category: null,
     amount: 0,
-    date: Date.now(),
+    date: null,
     comment: "",
     disabledDates: (date) => {
       return date.getTime() > new Date().getTime();
@@ -127,6 +127,15 @@ export default {
   methods: {
     ...mapMutations(["SET_TABS"]),
 
+    reset() {
+      this.amount = 0;
+      this.comment = "";
+      this.category = this.date = null;
+    },
+    close() {
+      this.reset();
+      this.showDialog = false;
+    },
     save() {
       const data = {
         id: Date.now(),
@@ -149,8 +158,7 @@ export default {
 
       this.$store.commit(`ADD_DATA`, data);
 
-      this.amount = 0;
-      this.comment = "";
+      this.reset();
 
       this.showDialog = false;
     },
