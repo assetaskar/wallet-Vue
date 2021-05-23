@@ -179,11 +179,11 @@ export default new Vuex.Store({
 		},
 
 		total(state, getters) {
-			const startAmount = getters["users/getActiveUserData"].startAmount;
+			const startAmount = getters["users/getActiveUserData"]?.startAmount;
 			const incomes = getters["incomes/totalIncomes"];
 			const expenses = getters["expenses/totalExpenses"];
 
-			return startAmount + incomes - expenses;
+			return startAmount + incomes - expenses || 0;
 		},
 
 		getCategories(state) {
