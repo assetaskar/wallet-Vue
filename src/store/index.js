@@ -18,7 +18,7 @@ export default new Vuex.Store({
 
 	getters: {
 		getData: state => {
-			const data = state[state.tabs].data;
+			const data = state[state.tabs].data.sort((a, b) => a.date > b.date);
 
 			switch (state.filter) {
 				case "today":
