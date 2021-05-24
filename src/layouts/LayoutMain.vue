@@ -133,4 +133,7 @@ export default {
 .md-app {
   height: 100vh;
 }
+.md-active {
+  max-width: 250px !important;
+}
 </style>

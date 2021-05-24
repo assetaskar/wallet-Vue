@@ -31,7 +31,7 @@
       >
         {{ item.amount }}
       </md-table-cell>
-      <md-table-cell>
+      <md-table-cell class="w-col">
         <md-button
           class="md-icon-button"
           @click="$emit('open-dialog-edit', item.id)"
@@ -61,4 +61,9 @@ export default {
 </script>
 
 <style>
+.w-col {
+  min-width: 150px;
+  width: 10%;
+  text-align: center;
+}
 </style>
