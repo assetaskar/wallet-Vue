@@ -45,10 +45,7 @@
       </div>
 
       <md-dialog-actions>
-        <md-button
-          class="md-primary"
-          @click="close"
-        >Отмена</md-button>
+        <md-button @click="close">Отмена</md-button>
         <md-button
           class="md-primary"
           @click="save"

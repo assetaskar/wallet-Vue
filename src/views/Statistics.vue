@@ -58,13 +58,22 @@
         </div>
       </div>
     </transition>
-    <data-table @open-dialog="openDialogEdit"></data-table>
+    <data-table
+      @open-dialog-edit="openDialogEdit"
+      @open-dialog-delete="openDialogDelete"
+    ></data-table>
     <data-add></data-add>
     <data-edit
       :show-dialog="showDialogEdit"
       :id="editId"
-      @show-dialog="closeDialogEdit"
+      @close-dialog="closeDialogEdit"
     ></data-edit>
+    <data-delete
+      :show-dialog="showDialogDelete"
+      :id="deleteId"
+      @close-dialog="closeDialogDelete"
+    >
+    </data-delete>
   </div>
 </template>
 
@@ -75,6 +84,7 @@ import SimpleSelect from "../components/SimpleSelect";
 import DataAdd from "../components/StatisticDataAdd";
 import DataTable from "../components/StatisticDataTable";
 import DataEdit from "../components/StatisticDataEdit";
+import DataDelete from "../components/StatisticDataDelete";
 
 import { mapGetters, mapMutations, mapState } from "vuex";
 
@@ -88,6 +98,7 @@ export default {
     DataAdd,
     DataTable,
     DataEdit,
+    DataDelete,
   },
 
   data() {
@@ -112,7 +123,9 @@ export default {
         },
       ],
       editId: null,
+      deleteId: null,
       showDialogEdit: false,
+      showDialogDelete: false,
     };
   },
 
@@ -142,6 +155,14 @@ export default {
     },
     closeDialogEdit() {
       this.showDialogEdit = false;
+    },
+    openDialogDelete(id) {
+      this.deleteId = id;
+      this.showDialogDelete = true;
+    },
+    closeDialogDelete() {
+      this.showDialogDelete = false;
+      this.deleteId = null;
     },
   },
 };

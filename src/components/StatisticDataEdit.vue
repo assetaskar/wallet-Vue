@@ -34,10 +34,7 @@
     </div>
 
     <md-dialog-actions>
-      <md-button
-        class="md-primary"
-        @click="close"
-      >Отмена</md-button>
+      <md-button @click="close">Отмена</md-button>
       <md-button
         class="md-primary"
         @click="edit"
@@ -125,7 +122,7 @@ export default {
     },
     close() {
       this.reset();
-      this.$emit("show-dialog");
+      this.$emit("close-dialog");
     },
     edit() {
       const oldData = this.dataById;
@@ -140,7 +137,7 @@ export default {
       this.$store.commit("EDIT_DATA", data);
 
       this.reset();
-      this.$emit("show-dialog");
+      this.$emit("close-dialog");
     },
   },
 };

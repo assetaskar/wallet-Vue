@@ -34,11 +34,14 @@
       <md-table-cell>
         <md-button
           class="md-icon-button"
-          @click="$emit('open-dialog', item.id)"
+          @click="$emit('open-dialog-edit', item.id)"
         >
           <md-icon>edit_note</md-icon>
         </md-button>
-        <md-button class="md-icon-button">
+        <md-button
+          class="md-icon-button"
+          @click="$emit('open-dialog-delete', item.id)"
+        >
           <md-icon>delete</md-icon>
         </md-button>
       </md-table-cell>

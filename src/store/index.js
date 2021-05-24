@@ -213,10 +213,15 @@ export default new Vuex.Store({
 				}
 				return item;
 			}, value);
-			const userId = getUserId();
 
-			localStorage.setItem(`${state.tabs}-${userId}`, JSON.stringify(data));
+			localStorage.setItem(`${state.tabs}-${getUserId()}`, JSON.stringify(data));
 			state[state.tabs].data = data;
+		},
+		DELETE_DATA(state, id) {
+			const index = state[state.tabs].data.findIndex(item => item.id === id);
+			state[state.tabs].data.splice(index, 1);
+
+			localStorage.setItem(`${state.tabs}-${getUserId()}`, JSON.stringify(state[state.tabs].data));
 		},
 	},
 
