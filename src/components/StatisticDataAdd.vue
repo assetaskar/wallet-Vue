@@ -92,7 +92,7 @@ export default {
         return this.tabs;
       },
       set(value) {
-        this.SET_TABS(value);
+        this.$store.commit("SET_TABS", value);
       },
     },
     v_categories: {
@@ -122,8 +122,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["SET_TABS"]),
-
     reset() {
       this.amount = 0;
       this.comment = "";
@@ -141,22 +139,8 @@ export default {
         date: new Date(this.v_date).toJSON(),
         comment: this.comment,
       };
-
-      const id = this.v_finance + "-" + localStorage.getItem("activeUserId");
-      const localData = localStorage.getItem(id);
-      if (localData) {
-        localStorage.setItem(
-          id,
-          JSON.stringify([...JSON.parse(localData), data])
-        );
-      } else {
-        localStorage.setItem(id, JSON.stringify([data]));
-      }
-
       this.$store.commit(`ADD_DATA`, data);
-
       this.reset();
-
       this.showDialog = false;
     },
   },

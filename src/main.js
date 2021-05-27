@@ -54,6 +54,11 @@ Vue.material.locale = {
 	cancel: "Отмена",
 };
 
+Date.prototype.getMonthDays = function() {
+	let d = new Date(this.getFullYear(), this.getMonth() + 1, 0);
+	return d.getDate();
+};
+
 Vue.config.productionTip = false;
 
 new Vue({

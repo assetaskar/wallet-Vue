@@ -106,10 +106,6 @@ export default {
       message: "Нет данных",
       filters: [
         {
-          value: "today",
-          text: "Сегодня",
-        },
-        {
           value: "week",
           text: "За эту неделю",
         },

@@ -13,19 +13,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		tabs: "expenses",
-		filter: "today",
+		filter: "week",
 	},
 
 	getters: {
 		getData: state => {
-			const data = state[state.tabs].data.sort((a, b) => a.date > b.date);
+			const data = state[state.tabs].data;
 
 			switch (state.filter) {
-				case "today":
-					return data.filter(
-						item => new Date(item.date).toLocaleDateString() === new Date().toLocaleDateString()
-					);
-
 				case "week":
 					const startDayWeek = getStartDayWeek();
 
@@ -52,60 +47,38 @@ export default new Vuex.Store({
 					data = [];
 
 				switch (state.filter) {
-					case "today":
-						({ labels, data } = getters.getData.reduce(
-							(obj, cur) => {
-								obj.labels.push(`${cur.category}`);
-								obj.data.push(cur.amount);
-
-								return obj;
-							},
-							{
-								labels: [],
-								data: [],
-							}
-						));
-						break;
-
 					case "week":
-						let startDayWeek = getStartDayWeek();
+						labels = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
+						data = Array(7).fill(0);
 
-						for (let i = 0; i < 7; i++) {
-							labels[i] = new Date(startDayWeek).toLocaleDateString();
-							data[i] = 0;
-							startDayWeek += 86400000;
-						}
-
-						getters.getData.forEach(el => {
-							const index = labels.indexOf(new Date(Date.parse(el.date)).toLocaleDateString());
-							data[index] += el.amount;
+						getters.getData.forEach(item => {
+							const index = ~(new Date(item.date).getDay() - 1)
+								? new Date(item.date).getDay() - 1
+								: 6;
+							data[index] += item.amount;
 						});
 						break;
 
 					case "month":
-						({ labels, data } = getters.getData.reduce(
-							(obj, cur) => {
-								const date = new Date(Date.parse(cur.date)).toLocaleDateString();
-								const index = obj.labels.indexOf(date);
+						labels = [];
+						data = Array(new Date().getMonthDays()).fill(0);
 
-								if (~index) {
-									obj.data[index] += cur.amount;
-								} else {
-									obj.labels.push(new Date(Date.parse(cur.date)).toLocaleDateString());
-									obj.data.push(cur.amount);
-								}
-
-								return obj;
-							},
-							{
-								labels: [],
-								data: [],
+						for (let i = 0; i < new Date().getMonthDays(); i++) {
+							if (i + 1 < 10) {
+								labels[i] = "0" + (i + 1);
+							} else {
+								labels[i] = (i + 1).toString();
 							}
-						));
+						}
+
+						getters.getData.forEach(item => {
+							const index = new Date(item.date).getDate() - 1;
+							data[index] += item.amount;
+						});
 						break;
 
 					case "year":
-						labels = Vue.material.locale.months;
+						labels = Vue.material.locale.shortMonths;
 						data = Array(12).fill(0);
 
 						getters.getData.forEach(item => {
@@ -123,7 +96,10 @@ export default new Vuex.Store({
 					datasets: [
 						{
 							data,
-							backgroundColor: "rgba(255, 99, 132, 0.5)",
+							backgroundColor:
+								state.tabs === "incomes" ? "rgba(66, 165, 245, 0.1)" : "rgba(255, 82, 82, 0.1)",
+							borderColor: state.tabs === "incomes" ? "#42a5f5" : "#ff5252",
+							borderWidth: 2,
 						},
 					],
 				};
@@ -201,6 +177,8 @@ export default new Vuex.Store({
 		},
 		ADD_DATA(state, data) {
 			state[state.tabs].data.push(data);
+			const newData = state[state.tabs].data.sort((a, b) => a.date > b.date);
+			localStorage.setItem(`${state.tabs}-${getUserId()}`, JSON.stringify(newData));
 		},
 		EDIT_DATA(state, value) {
 			const data = state[state.tabs].data.map(function(item) {
