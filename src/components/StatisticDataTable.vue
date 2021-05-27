@@ -1,34 +1,23 @@
 <template>
   <md-table
     v-model="getData"
-    class="md-elevation-5"
+    class="md-elevation-5 mb"
+    v-if="getData.length"
   >
     <md-table-row
       slot="md-table-row"
       slot-scope="{ item }"
     >
-      <md-table-cell
-        md-label="Категория"
-        md-sort-by="category"
-      >
+      <md-table-cell md-label="Категория">
         {{ item.category }}
       </md-table-cell>
-      <md-table-cell
-        md-label="Комментарии"
-        md-sort-by="comment"
-      >
+      <md-table-cell md-label="Комментарии">
         {{ item.comment }}
       </md-table-cell>
-      <md-table-cell
-        md-label="Дата"
-        md-sort-by="date"
-      >
+      <md-table-cell md-label="Дата">
         {{ item.date | toLocaleDateString }}
       </md-table-cell>
-      <md-table-cell
-        md-label="Сумма"
-        md-sort-by="amount"
-      >
+      <md-table-cell md-label="Сумма">
         {{ item.amount }}
       </md-table-cell>
       <md-table-cell class="w-col">
@@ -65,5 +54,10 @@ export default {
   min-width: 150px;
   width: 10%;
   text-align: center;
+}
+</style>
+<style scoped>
+.mb {
+  margin-bottom: 50px !important;
 }
 </style>

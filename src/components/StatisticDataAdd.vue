@@ -53,7 +53,7 @@
       </md-dialog-actions>
     </md-dialog>
 
-    <md-speed-dial class="md-bottom-right">
+    <md-speed-dial class="md-bottom-right z-i">
       <md-speed-dial-target @click="showDialog = true">
         <md-icon>add</md-icon>
       </md-speed-dial-target>
@@ -170,5 +170,9 @@ export default {
 
 .md-dialog /deep/.md-dialog-container {
   min-width: 320px;
+}
+
+.z-i {
+  z-index: 10;
 }
 </style>

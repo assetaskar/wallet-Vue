@@ -46,12 +46,12 @@
         v-else
         key="chart"
       >
-        <div class="md-layout-item md-small-size-100 mb">
+        <div class="md-layout-item md-small-size-100 md-size-40 mb">
           <md-content class="md-elevation-5">
             <chart-doughnut :chart-data="dataCollectionForDoughnut"></chart-doughnut>
           </md-content>
         </div>
-        <div class="md-layout-item md-small-size-100 mb">
+        <div class="md-layout-item md-small-size-100 md-size-60 mb">
           <md-content class="md-elevation-5">
             <chart-bar :chart-data="dataCollectionForBar"></chart-bar>
           </md-content>
