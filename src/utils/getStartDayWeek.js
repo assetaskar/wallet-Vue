@@ -7,10 +7,7 @@ const getStartDayWeek = () => {
 		? startDayWeek.setDate(startDayWeek.getDate() - dayWeek + 1)
 		: startDayWeek.setDate(startDayWeek.getDate() - 6);
 
-	startDayWeek = new Date(startDayWeek.setHours(0, 0, 0, 0)).toJSON();
-	startDayWeek = Date.parse(startDayWeek);
-
-	return startDayWeek;
+	return new Date(startDayWeek.setHours(0, 0, 0, 0)).getTime();
 };
 
 export default getStartDayWeek;

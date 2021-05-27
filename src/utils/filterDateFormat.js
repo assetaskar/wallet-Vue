@@ -2,5 +2,5 @@
 export default function dateFormat(value) {
 	if (!value) return "";
 	value = value.toString();
-	return new Date(Date.parse(value)).toLocaleDateString();
+	return new Date(value).toLocaleDateString();
 }

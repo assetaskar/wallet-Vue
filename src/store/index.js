@@ -23,9 +23,7 @@ export default new Vuex.Store({
 			switch (state.filter) {
 				case "today":
 					return data.filter(
-						item =>
-							new Date(Date.parse(item.date)).toLocaleDateString() ===
-							new Date().toLocaleDateString()
+						item => new Date(item.date).toLocaleDateString() === new Date().toLocaleDateString()
 					);
 
 				case "week":
@@ -36,13 +34,11 @@ export default new Vuex.Store({
 					);
 
 				case "month":
-					return data.filter(
-						item => new Date().getMonth() === new Date(Date.parse(item.date)).getMonth()
-					);
+					return data.filter(item => new Date().getMonth() === new Date(item.date).getMonth());
 
 				case "year":
 					return data.filter(
-						item => new Date().getFullYear() === new Date(Date.parse(item.date)).getFullYear()
+						item => new Date().getFullYear() === new Date(item.date).getFullYear()
 					);
 
 				default:
@@ -113,7 +109,7 @@ export default new Vuex.Store({
 						data = Array(12).fill(0);
 
 						getters.getData.forEach(item => {
-							const index = new Date(Date.parse(item.date)).getMonth();
+							const index = new Date(item.date).getMonth();
 							data[index] += item.amount;
 						});
 						break;
