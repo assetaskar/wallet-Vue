@@ -1,41 +1,47 @@
 <template>
-  <md-table
-    v-model="getData"
-    class="md-elevation-5 mb"
+  <div
+    @click="onClick"
     v-if="getData.length"
   >
-    <md-table-row
-      slot="md-table-row"
-      slot-scope="{ item }"
+    <md-table
+      v-model="getData"
+      class="md-elevation-5 mb"
     >
-      <md-table-cell md-label="Категория">
-        {{ item.category }}
-      </md-table-cell>
-      <md-table-cell md-label="Комментарии">
-        {{ item.comment }}
-      </md-table-cell>
-      <md-table-cell md-label="Дата">
-        {{ item.date | toLocaleDateString }}
-      </md-table-cell>
-      <md-table-cell md-label="Сумма">
-        {{ item.amount }}
-      </md-table-cell>
-      <md-table-cell class="w-col">
-        <md-button
-          class="md-icon-button"
-          @click="$emit('open-dialog-edit', item.id)"
-        >
-          <md-icon>edit_note</md-icon>
-        </md-button>
-        <md-button
-          class="md-icon-button"
-          @click="$emit('open-dialog-delete', item.id)"
-        >
-          <md-icon>delete</md-icon>
-        </md-button>
-      </md-table-cell>
-    </md-table-row>
-  </md-table>
+      <md-table-row
+        slot="md-table-row"
+        slot-scope="{ item }"
+      >
+        <md-table-cell md-label="Категория">
+          {{ item.category }}
+        </md-table-cell>
+        <md-table-cell md-label="Комментарии">
+          {{ item.comment }}
+        </md-table-cell>
+        <md-table-cell md-label="Дата">
+          {{ item.date | toLocaleDateString }}
+        </md-table-cell>
+        <md-table-cell md-label="Сумма">
+          {{ item.amount }}
+        </md-table-cell>
+        <md-table-cell class="w-col">
+          <md-button
+            class="md-icon-button"
+            :data-id="item.id"
+            data-event="edit"
+          >
+            <md-icon>edit_note</md-icon>
+          </md-button>
+          <md-button
+            class="md-icon-button"
+            :data-id="item.id"
+            data-event="delete"
+          >
+            <md-icon>delete</md-icon>
+          </md-button>
+        </md-table-cell>
+      </md-table-row>
+    </md-table>
+  </div>
 </template>
 
 <script>
@@ -45,6 +51,21 @@ export default {
 
   computed: {
     ...mapGetters(["getData"]),
+  },
+
+  methods: {
+    onClick(event) {
+      const el = event.target.closest("[data-id]");
+      if (!el) return false;
+      switch (el.dataset.event) {
+        case "edit":
+          this.$emit("open-dialog-edit", +el.dataset.id);
+          break;
+        case "delete":
+          this.$emit("open-dialog-delete", +el.dataset.id);
+          break;
+      }
+    },
   },
 };
 </script>
