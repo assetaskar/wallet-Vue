@@ -4,6 +4,7 @@ import Statistics from "../views/Statistics";
 import Auth from "../views/Auth.vue";
 import LayoutMain from "../layouts/LayoutMain";
 import Settings from "../views/Settings";
+import Categories from "../views/Categories";
 
 Vue.use(VueRouter);
 
@@ -53,6 +54,11 @@ const routes = [
 				path: "settings",
 				name: "settings",
 				component: Settings,
+			},
+			{
+				path: "categories",
+				name: "categories",
+				component: Categories,
 			},
 		],
 	},

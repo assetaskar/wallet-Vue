@@ -61,28 +61,19 @@
 
       <md-list>
         <md-list-item
-          :to="{ name: 'statistics' }"
-          exact
+          v-for="item of links"
+          :key="item.name"
+          :to="item.to"
+          :exact="item.exact"
         >
-          <md-icon>bar_chart</md-icon>
-          <span class="md-list-item-text">Статистика</span>
+          <md-icon>{{ item.icon }}</md-icon>
+          <span class="md-list-item-text">{{ item.name }}</span>
           <md-tooltip
             v-show="!menuVisible"
             md-direction="right"
             md-delay="500"
           >
-            Статистика
-          </md-tooltip>
-        </md-list-item>
-        <md-list-item :to="{ name: 'settings' }">
-          <md-icon>settings</md-icon>
-          <span class="md-list-item-text">Настройки</span>
-          <md-tooltip
-            v-show="!menuVisible"
-            md-direction="right"
-            md-delay="500"
-          >
-            Настройки
+            {{ item.name }}
           </md-tooltip>
         </md-list-item>
       </md-list>
@@ -102,6 +93,32 @@ export default {
     return {
       menuVisible: false,
       id: 123,
+      links: [
+        {
+          name: "Статистика",
+          icon: "bar_chart",
+          to: {
+            name: "statistics",
+          },
+          exact: true,
+        },
+        {
+          name: "Категории",
+          icon: "category",
+          to: {
+            name: "categories",
+          },
+          exact: false,
+        },
+        {
+          name: "Настройки",
+          icon: "settings",
+          to: {
+            name: "settings",
+          },
+          exact: false,
+        },
+      ],
     };
   },
 
