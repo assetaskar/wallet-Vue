@@ -197,6 +197,35 @@ export default new Vuex.Store({
 
 			localStorage.setItem(`${state.tabs}-${getUserId()}`, JSON.stringify(state[state.tabs].data));
 		},
+		EDIT_CATEGORY(state, data) {
+			const prev = data.prev;
+			let index = state.expenses.categories.findIndex(category => category.name === prev);
+			if (~index) {
+				state.expenses.categories.splice(index, 1, data.next);
+				state.expenses.data.forEach(item => {
+					if (item.category === prev) {
+						item.category = data.next.name;
+					}
+				});
+				localStorage.setItem(`expenses-${getUserId()}`, JSON.stringify(state.expenses.data));
+				localStorage.setItem(
+					`expenses-categories-${getUserId()}`,
+					JSON.stringify(state.expenses.categories)
+				);
+				return;
+			}
+			index = state.incomes.categories.findIndex(category => category.name === prev);
+			if (~index) {
+				state.incomes.categories.splice(index, 1, data.next);
+				localStorage.setItem(`incomes-${getUserId()}`, JSON.stringify(state.incomes.data));
+				localStorage.setItem(
+					`incomes-categories-${getUserId()}`,
+					JSON.stringify(state.incomes.categories)
+				);
+				return;
+			}
+			throw new Error("Категория не найдено");
+		},
 	},
 
 	modules: {

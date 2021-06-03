@@ -5,43 +5,43 @@ export default {
 		categories: [
 			{
 				name: "Транспорт",
-				color: "tomato",
+				color: "#ff6347",
 			},
 			{
 				name: "Спорт",
-				color: "goldenrod",
+				color: "#daa520",
 			},
 			{
 				name: "Семья",
-				color: "lightblue",
+				color: "#69849b",
 			},
 			{
 				name: "Продукты",
-				color: "cyan",
+				color: "#00FFFF",
 			},
 			{
 				name: "Подарки",
-				color: "teal",
+				color: "#006864",
 			},
 			{
 				name: "Образование",
-				color: "coral",
+				color: "#ff7f50",
 			},
 			{
 				name: "Кафе",
-				color: "lightgreen",
+				color: "#90ee90",
 			},
 			{
 				name: "Дом",
-				color: "grey",
+				color: "#808080",
 			},
 			{
 				name: "Здоровье",
-				color: "brown",
+				color: "#f2b9cc",
 			},
 			{
 				name: "Досуг",
-				color: "chocolate",
+				color: "#887d8a",
 			},
 		],
 	},
@@ -55,6 +55,9 @@ export default {
 	mutations: {
 		UPDATE_DATA(state, data) {
 			state.data = data;
+		},
+		UPDATE_CATEGORIES(state, data) {
+			state.categories = data;
 		},
 	},
 };

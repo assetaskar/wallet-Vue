@@ -5,15 +5,15 @@ export default {
 		categories: [
 			{
 				name: "Зарплата",
-				color: "tomato",
+				color: "#ff6347",
 			},
 			{
 				name: "Проценты по вкладу",
-				color: "goldenrod",
+				color: "#daa520",
 			},
 			{
 				name: "Подарок",
-				color: "lightblue",
+				color: "#48929b",
 			},
 		],
 	},
@@ -27,6 +27,9 @@ export default {
 	mutations: {
 		UPDATE_DATA(state, data) {
 			state.data = data;
+		},
+		UPDATE_CATEGORIES(state, data) {
+			state.categories = data;
 		},
 	},
 };

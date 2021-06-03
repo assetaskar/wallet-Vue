@@ -30,7 +30,7 @@
           </md-button>
 
           <md-menu-content>
-            <md-menu-item @click="edit(item.name)">
+            <md-menu-item @click="$emit('edit', item)">
               <span>Редактировать</span>
               <md-icon>edit</md-icon>
             </md-menu-item>
@@ -61,9 +61,6 @@ export default {
   },
 
   methods: {
-    edit(name) {
-      console.log(name);
-    },
     del(name) {
       console.log(name);
     },

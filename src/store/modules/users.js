@@ -1,3 +1,5 @@
+import getUserId from "@/utils/getUserId";
+
 export default {
 	namespaced: true,
 	state: {
@@ -7,8 +9,7 @@ export default {
 
 	getters: {
 		getActiveUserData(state) {
-			if (state.isSignIn)
-				return state.usersAll.find(user => user.id === localStorage.getItem("activeUserId"));
+			if (state.isSignIn) return state.usersAll.find(user => user.id === getUserId());
 		},
 	},
 
@@ -26,12 +27,22 @@ export default {
 
 	actions: {
 		updateUserData({ commit }) {
-			const expensesLocalData =
-				JSON.parse(localStorage.getItem(`expenses-${localStorage.getItem("activeUserId")}`)) || [];
-			const incomesLocalData =
-				JSON.parse(localStorage.getItem(`incomes-${localStorage.getItem("activeUserId")}`)) || [];
+			const expensesLocalData = JSON.parse(localStorage.getItem(`expenses-${getUserId()}`)) || [];
+			const incomesLocalData = JSON.parse(localStorage.getItem(`incomes-${getUserId()}`)) || [];
+			const expensesLocalCategories = JSON.parse(
+				localStorage.getItem(`expenses-categories-${getUserId()}`)
+			);
+			const incomesLocalCategories = JSON.parse(
+				localStorage.getItem(`incomes-categories-${getUserId()}`)
+			);
+
 			commit("expenses/UPDATE_DATA", expensesLocalData, { root: true });
 			commit("incomes/UPDATE_DATA", incomesLocalData, { root: true });
+
+			if (expensesLocalCategories)
+				commit("expenses/UPDATE_CATEGORIES", expensesLocalCategories, { root: true });
+			if (incomesLocalCategories)
+				commit("incomes/UPDATE_CATEGORIES", incomesLocalCategories, { root: true });
 
 			commit("IS_SIGN_IN");
 		},
