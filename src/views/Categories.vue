@@ -2,7 +2,7 @@
   <div>
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-xsmall-size-100 mb">
-        <div class="md-layout-item md-size-50">
+        <div>
           <h3>Расходы:</h3>
         </div>
 
@@ -13,7 +13,7 @@
       </div>
 
       <div class="md-layout-item md-xsmall-size-100">
-        <div class="md-layout-item md-size-50">
+        <div>
           <h3>Доходы:</h3>
         </div>
 
@@ -21,48 +21,48 @@
           :data="categoriesIncomes"
           @edit="openEdit"
         ></categories-list>
-
-        <div>
-          <md-dialog :md-active.sync="showDialogEdit">
-            <div class="pd">
-              <md-field>
-                <md-input v-model="editCategoryName"></md-input>
-              </md-field>
-
-              Цвет:
-              <span
-                class="color"
-                :style="{ backgroundColor: color }"
-                @click="showDialogColor = true"
-              ></span>
-            </div>
-            <md-dialog-actions>
-              <md-button @click="cancel">Отмена</md-button>
-              <md-button
-                class="md-primary"
-                @click="edit"
-              >Изменить</md-button>
-            </md-dialog-actions>
-          </md-dialog>
-
-          <md-dialog :md-active.sync="showDialogColor">
-            <div class="wrap_color-picker">
-              <color-picker
-                style="width: 220px"
-                :color="color"
-                @changeColor="changeColor"
-              ></color-picker>
-            </div>
-            <md-dialog-actions>
-              <md-button @click="showDialogColor = false">Отмена</md-button>
-              <md-button
-                class="md-primary"
-                @click="setColor"
-              >Ok</md-button>
-            </md-dialog-actions>
-          </md-dialog>
-        </div>
       </div>
+    </div>
+
+    <div>
+      <md-dialog :md-active.sync="showDialogEdit">
+        <div class="pd">
+          <md-field>
+            <md-input v-model="editCategoryName"></md-input>
+          </md-field>
+
+          Цвет:
+          <span
+            class="color"
+            :style="{ backgroundColor: color }"
+            @click="showDialogColor = true"
+          ></span>
+        </div>
+        <md-dialog-actions>
+          <md-button @click="cancel">Отмена</md-button>
+          <md-button
+            class="md-primary"
+            @click="edit"
+          >Изменить</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+
+      <md-dialog :md-active.sync="showDialogColor">
+        <div class="wrap_color-picker">
+          <color-picker
+            style="width: 220px"
+            :color="color"
+            @changeColor="changeColor"
+          ></color-picker>
+        </div>
+        <md-dialog-actions>
+          <md-button @click="showDialogColor = false">Отмена</md-button>
+          <md-button
+            class="md-primary"
+            @click="setColor"
+          >Ok</md-button>
+        </md-dialog-actions>
+      </md-dialog>
     </div>
   </div>
 </template>
