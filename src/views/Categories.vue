@@ -9,6 +9,7 @@
         <categories-list
           :data="categoriesExpenses"
           @edit="openEdit"
+          @del="openDel"
         ></categories-list>
       </div>
 
@@ -20,12 +21,16 @@
         <categories-list
           :data="categoriesIncomes"
           @edit="openEdit"
+          @del="openDel"
         ></categories-list>
       </div>
     </div>
 
     <div>
-      <md-dialog :md-active.sync="showDialogEdit">
+      <md-dialog
+        :md-active.sync="showDialogEdit"
+        @md-closed="close"
+      >
         <div class="pd">
           <md-field>
             <md-input v-model="editCategoryName"></md-input>
@@ -39,7 +44,7 @@
           ></span>
         </div>
         <md-dialog-actions>
-          <md-button @click="cancel">Отмена</md-button>
+          <md-button @click="close">Отмена</md-button>
           <md-button
             class="md-primary"
             @click="edit"
@@ -63,6 +68,23 @@
           >Ok</md-button>
         </md-dialog-actions>
       </md-dialog>
+
+      <md-dialog
+        :md-active.sync="showDialogDel"
+        @md-closed="close"
+      >
+        <md-dialog-title>Удалить категорию?</md-dialog-title>
+        <md-dialog-content>
+          Все содержащиеся в ней операции будут перемещены в категорию "Другое"
+        </md-dialog-content>
+        <md-dialog-actions>
+          <md-button @click="close">Отмена</md-button>
+          <md-button
+            class="md-primary"
+            @click="del"
+          >Ok</md-button>
+        </md-dialog-actions>
+      </md-dialog>
     </div>
   </div>
 </template>
@@ -83,11 +105,12 @@ export default {
   data: () => ({
     editCategoryName: null,
     deleteCategoryName: null,
+    prevCategory: null,
     showDialogEdit: false,
+    showDialogDel: false,
+    showDialogColor: false,
     color: null,
     tempColor: null,
-    showDialogColor: false,
-    prevCategory: null,
   }),
 
   computed: {
@@ -109,13 +132,13 @@ export default {
       this.showDialogColor = false;
     },
     openEdit(category) {
-      this.prevCategory = category.name;
-      this.editCategoryName = category.name;
+      this.prevCategory = this.editCategoryName = category.name;
       this.color = category.color;
       this.showDialogEdit = true;
     },
-    cancel() {
+    close() {
       this.showDialogEdit = false;
+      this.showDialogDel = false;
       this.reset();
     },
     edit() {
@@ -127,11 +150,18 @@ export default {
             color: this.color,
           },
         });
-      this.showDialogEdit = false;
-      this.reset();
+      this.close();
     },
     reset() {
       this.editCategoryName = this.deleteCategoryName = this.color = this.prevCategory = this.tempColor = null;
+    },
+    openDel(name) {
+      this.deleteCategoryName = name;
+      this.showDialogDel = true;
+    },
+    del() {
+      this.$store.dispatch("deleteCategory", this.deleteCategoryName);
+      this.close();
     },
   },
 };

@@ -29,20 +29,12 @@ export default {
 		updateUserData({ commit }) {
 			const expensesLocalData = JSON.parse(localStorage.getItem(`expenses-${getUserId()}`)) || [];
 			const incomesLocalData = JSON.parse(localStorage.getItem(`incomes-${getUserId()}`)) || [];
-			const expensesLocalCategories = JSON.parse(
-				localStorage.getItem(`expenses-categories-${getUserId()}`)
-			);
-			const incomesLocalCategories = JSON.parse(
-				localStorage.getItem(`incomes-categories-${getUserId()}`)
-			);
 
 			commit("expenses/UPDATE_DATA", expensesLocalData, { root: true });
 			commit("incomes/UPDATE_DATA", incomesLocalData, { root: true });
 
-			if (expensesLocalCategories)
-				commit("expenses/UPDATE_CATEGORIES", expensesLocalCategories, { root: true });
-			if (incomesLocalCategories)
-				commit("incomes/UPDATE_CATEGORIES", incomesLocalCategories, { root: true });
+			commit("expenses/UPDATE_CATEGORIES", null, { root: true });
+			commit("incomes/UPDATE_CATEGORIES", null, { root: true });
 
 			commit("IS_SIGN_IN");
 		},

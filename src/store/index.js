@@ -228,6 +228,22 @@ export default new Vuex.Store({
 		},
 	},
 
+	actions: {
+		deleteCategory({ commit, state }, name) {
+			let index = state.expenses.categories.findIndex(category => category.name === name);
+			if (~index) {
+				commit("expenses/DELETE_CATEGORY", { name, index });
+				return;
+			}
+			index = state.incomes.categories.findIndex(category => category.name === name);
+			if (~index) {
+				commit("incomes/DELETE_CATEGORY", { name, index });
+				return;
+			}
+			throw new Error("Категория не найдено");
+		},
+	},
+
 	modules: {
 		expenses,
 		incomes,

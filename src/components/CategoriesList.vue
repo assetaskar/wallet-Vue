@@ -1,7 +1,7 @@
 <template>
   <md-content class="md-elevation-5 pd">
     <div
-      class="md-layout md-gutter md-alignment-center"
+      class="md-layout md-gutter md-alignment-center height"
       v-for="item in data"
       :key="item.name"
     >
@@ -21,7 +21,10 @@
         class="md-layout-item"
         style="flexGrow: 0"
       >
-        <md-menu md-direction="bottom-end">
+        <md-menu
+          md-direction="bottom-end"
+          v-if="!item.service"
+        >
           <md-button
             class="md-icon-button"
             md-menu-trigger
@@ -35,7 +38,7 @@
               <md-icon>edit</md-icon>
             </md-menu-item>
 
-            <md-menu-item @click="del(item.name)">
+            <md-menu-item @click="$emit('del', item.name)">
               <span>Удалить</span>
               <md-icon>delete</md-icon>
             </md-menu-item>
@@ -77,5 +80,8 @@ export default {
   width: 15px;
   height: 15px;
   border-radius: 50%;
+}
+.height {
+  min-height: 3.5em;
 }
 </style>
