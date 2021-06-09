@@ -217,6 +217,11 @@ export default new Vuex.Store({
 			index = state.incomes.categories.findIndex(category => category.name === prev);
 			if (~index) {
 				state.incomes.categories.splice(index, 1, data.next);
+				state.incomes.data.forEach(item => {
+					if (item.category === prev) {
+						item.category = data.next.name;
+					}
+				});
 				localStorage.setItem(`incomes-${getUserId()}`, JSON.stringify(state.incomes.data));
 				localStorage.setItem(
 					`incomes-categories-${getUserId()}`,
