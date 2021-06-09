@@ -51,5 +51,12 @@ export default {
 			localStorage.setItem(`incomes-categories-${getUserId()}`, JSON.stringify(state.categories));
 			localStorage.setItem(`incomes-${getUserId()}`, JSON.stringify(state.data));
 		},
+		ADD_CATEGORY(state, newCategory) {
+			if (~state.categories.findIndex(cat => cat.name === newCategory.name)) {
+				throw new Error("Категория с жанным именем уже существует");
+			}
+			state.categories.unshift(newCategory);
+			localStorage.setItem(`incomes-categories-${getUserId()}`, JSON.stringify(state.categories));
+		},
 	},
 };

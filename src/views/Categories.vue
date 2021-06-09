@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="fix">
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-xsmall-size-100 mb">
         <div>
@@ -86,6 +86,8 @@
         </md-dialog-actions>
       </md-dialog>
     </div>
+
+    <categories-add></categories-add>
   </div>
 </template>
 
@@ -93,6 +95,7 @@
 import { mapState } from "vuex";
 import CategoriesList from "../components/CategoriesList.vue";
 import ColorPicker from "@caohenghu/vue-colorpicker";
+import CategoriesAdd from "../components/CategoriesAdd.vue";
 
 export default {
   name: "Categories",
@@ -100,6 +103,7 @@ export default {
   components: {
     CategoriesList,
     ColorPicker,
+    CategoriesAdd,
   },
 
   data: () => ({
@@ -183,5 +187,8 @@ export default {
   height: 1em;
   margin-left: 1em;
   cursor: pointer;
+}
+.fix {
+  margin: 0 3px;
 }
 </style>
