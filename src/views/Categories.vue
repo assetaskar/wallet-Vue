@@ -31,41 +31,19 @@
         :md-active.sync="showDialogEdit"
         @md-closed="close"
       >
-        <div class="pd">
+        <md-dialog-content>
           <md-field>
             <md-input v-model="editCategoryName"></md-input>
           </md-field>
 
-          Цвет:
-          <span
-            class="color"
-            :style="{ backgroundColor: color }"
-            @click="showDialogColor = true"
-          ></span>
-        </div>
+          <color-picker v-model="color"></color-picker>
+        </md-dialog-content>
         <md-dialog-actions>
           <md-button @click="close">Отмена</md-button>
           <md-button
             class="md-primary"
             @click="edit"
           >Изменить</md-button>
-        </md-dialog-actions>
-      </md-dialog>
-
-      <md-dialog :md-active.sync="showDialogColor">
-        <div class="wrap_color-picker">
-          <color-picker
-            style="width: 220px"
-            :color="color"
-            @changeColor="changeColor"
-          ></color-picker>
-        </div>
-        <md-dialog-actions>
-          <md-button @click="showDialogColor = false">Отмена</md-button>
-          <md-button
-            class="md-primary"
-            @click="setColor"
-          >Ok</md-button>
         </md-dialog-actions>
       </md-dialog>
 
@@ -94,16 +72,16 @@
 <script>
 import { mapState } from "vuex";
 import CategoriesList from "../components/CategoriesList.vue";
-import ColorPicker from "@caohenghu/vue-colorpicker";
 import CategoriesAdd from "../components/CategoriesAdd.vue";
+import ColorPicker from "../components/ColorPicker.vue";
 
 export default {
   name: "Categories",
 
   components: {
     CategoriesList,
-    ColorPicker,
     CategoriesAdd,
+    ColorPicker,
   },
 
   data: () => ({
@@ -112,9 +90,7 @@ export default {
     prevCategory: null,
     showDialogEdit: false,
     showDialogDel: false,
-    showDialogColor: false,
     color: null,
-    tempColor: null,
   }),
 
   computed: {
@@ -125,16 +101,6 @@ export default {
   },
 
   methods: {
-    changeColor(color) {
-      const {
-        rgba: { r, g, b, a },
-      } = color;
-      this.tempColor = `rgba(${r}, ${g}, ${b}, ${a})`;
-    },
-    setColor() {
-      this.color = this.tempColor;
-      this.showDialogColor = false;
-    },
     openEdit(category) {
       this.prevCategory = this.editCategoryName = category.name;
       this.color = category.color;
@@ -157,7 +123,11 @@ export default {
       this.close();
     },
     reset() {
-      this.editCategoryName = this.deleteCategoryName = this.color = this.prevCategory = this.tempColor = null;
+      this.editCategoryName =
+        this.deleteCategoryName =
+        this.color =
+        this.prevCategory =
+          null;
     },
     openDel(name) {
       this.deleteCategoryName = name;
@@ -174,9 +144,6 @@ export default {
 <style scoped>
 .mb {
   margin-bottom: 30px;
-}
-.pd {
-  padding: 0 1.5em;
 }
 .wrap_color-picker {
   padding: 1.5em 2em 0;
