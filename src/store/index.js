@@ -1,12 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import expenses from "./modules/expenses";
-import incomes from "./modules/incomes";
-import users from "./modules/users";
+import expenses from "@/store/modules/expenses";
+import incomes from "@/store/modules/incomes";
+import users from "@/store/modules/users";
+import * as getters from "@/store/getters";
 
-import getStartDayWeek from "../utils/getStartDayWeek";
-import getUserId from "../utils/getUserId";
+import getUserId from "@/utils/getUserId";
 
 Vue.use(Vuex);
 
@@ -16,157 +16,7 @@ export default new Vuex.Store({
 		filter: "week",
 	},
 
-	getters: {
-		getData: state => {
-			const data = state[state.tabs].data;
-
-			switch (state.filter) {
-				case "week":
-					const startDayWeek = getStartDayWeek();
-
-					return data.filter(
-						item => startDayWeek <= Date.parse(item.date) && Date.parse(item.date) <= Date.now()
-					);
-
-				case "month":
-					return data.filter(item => new Date().getMonth() === new Date(item.date).getMonth());
-
-				case "year":
-					return data.filter(
-						item => new Date().getFullYear() === new Date(item.date).getFullYear()
-					);
-
-				default:
-					return [];
-			}
-		},
-
-		dataCollectionForBar: (state, getters) => {
-			if (getters.getData.length) {
-				let labels = [],
-					data = [];
-
-				switch (state.filter) {
-					case "week":
-						labels = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
-						data = Array(7).fill(0);
-
-						getters.getData.forEach(item => {
-							const index = ~(new Date(item.date).getDay() - 1)
-								? new Date(item.date).getDay() - 1
-								: 6;
-							data[index] += item.amount;
-						});
-						break;
-
-					case "month":
-						labels = [];
-						data = Array(new Date().getMonthDays()).fill(0);
-
-						for (let i = 0; i < new Date().getMonthDays(); i++) {
-							if (i + 1 < 10) {
-								labels[i] = "0" + (i + 1);
-							} else {
-								labels[i] = (i + 1).toString();
-							}
-						}
-
-						getters.getData.forEach(item => {
-							const index = new Date(item.date).getDate() - 1;
-							data[index] += item.amount;
-						});
-						break;
-
-					case "year":
-						labels = Vue.material.locale.shortMonths;
-						data = Array(12).fill(0);
-
-						getters.getData.forEach(item => {
-							const index = new Date(item.date).getMonth();
-							data[index] += item.amount;
-						});
-						break;
-
-					default:
-						return {};
-				}
-
-				return {
-					labels,
-					datasets: [
-						{
-							data,
-							backgroundColor:
-								state.tabs === "incomes" ? "rgba(66, 165, 245, 0.1)" : "rgba(255, 82, 82, 0.1)",
-							borderColor: state.tabs === "incomes" ? "#42a5f5" : "#ff5252",
-							borderWidth: 2,
-						},
-					],
-				};
-			}
-
-			return {};
-		},
-
-		dataCollectionForDoughnut: (state, getters) => {
-			if (getters.getData.length) {
-				let { labels, data, colors } = getters.getData.reduce(
-					(obj, cur) => {
-						const isHaveObj = obj.labels.indexOf(cur.category);
-
-						if (~isHaveObj) {
-							obj.data[isHaveObj] += cur.amount;
-						} else {
-							const indexCategory = state[state.tabs].categories.findIndex(
-								item => item.name === cur.category
-							);
-
-							obj.labels.push(cur.category);
-							obj.data.push(cur.amount);
-							obj.colors.push(state[state.tabs].categories[indexCategory].color);
-						}
-
-						return obj;
-					},
-					{
-						labels: [],
-						data: [],
-						colors: [],
-					}
-				);
-
-				return {
-					labels,
-					datasets: [
-						{
-							data,
-							backgroundColor: colors,
-							borderColor: "#424242",
-						},
-					],
-				};
-			}
-
-			return {};
-		},
-
-		total(state, getters) {
-			const startAmount = getters["users/getActiveUserData"]?.startAmount;
-			const incomes = getters["incomes/totalIncomes"];
-			const expenses = getters["expenses/totalExpenses"];
-
-			return startAmount + incomes - expenses || 0;
-		},
-
-		getCategories(state) {
-			return state[state.tabs].categories.map(category => {
-				return {
-					value: category.name,
-					text: category.name,
-				};
-			});
-		},
-	},
+	getters,
 
 	mutations: {
 		SET_FILTER(state, value) {
