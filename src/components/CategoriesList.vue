@@ -5,40 +5,25 @@
       v-for="item in data"
       :key="item.name"
     >
-      <div
-        class="md-layout-item"
-        style="flexGrow: 0"
-      >
-        <span
-          :style="{backgroundColor: item.color}"
-          class="color"
-        ></span>
+      <div class="md-layout-item" style="flex-grow: 0">
+        <span :style="{ backgroundColor: item.color }" class="color"></span>
       </div>
       <div class="md-layout-item">
         {{ item.name }}
       </div>
-      <div
-        class="md-layout-item"
-        style="flexGrow: 0"
-      >
-        <md-menu
-          md-direction="bottom-end"
-          v-if="!item.service"
-        >
-          <md-button
-            class="md-icon-button"
-            md-menu-trigger
-          >
+      <div class="md-layout-item" style="flex-grow: 0">
+        <md-menu md-direction="bottom-end" v-if="!item.service">
+          <md-button class="md-icon-button" md-menu-trigger>
             <md-icon>more_vert</md-icon>
           </md-button>
 
           <md-menu-content>
-            <md-menu-item @click="$emit('edit', item)">
+            <md-menu-item @click="$emit('edit', { ...item, categoryType })">
               <span>Редактировать</span>
               <md-icon>edit</md-icon>
             </md-menu-item>
 
-            <md-menu-item @click="$emit('del', item.name)">
+            <md-menu-item @click="$emit('del', item.name, categoryType)">
               <span>Удалить</span>
               <md-icon>delete</md-icon>
             </md-menu-item>
@@ -61,11 +46,8 @@ export default {
         );
       },
     },
-  },
-
-  methods: {
-    del(name) {
-      console.log(name);
+    categoryType: {
+      type: String,
     },
   },
 };

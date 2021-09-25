@@ -8,6 +8,7 @@
 
         <categories-list
           :data="categoriesExpenses"
+          category-type="expenses"
           @edit="openEdit"
           @del="openDel"
         ></categories-list>
@@ -20,6 +21,7 @@
 
         <categories-list
           :data="categoriesIncomes"
+          category-type="incomes"
           @edit="openEdit"
           @del="openDel"
         ></categories-list>
@@ -27,10 +29,7 @@
     </div>
 
     <div>
-      <md-dialog
-        :md-active.sync="showDialogEdit"
-        @md-closed="close"
-      >
+      <md-dialog :md-active.sync="showDialogEdit" @md-closed="close">
         <md-dialog-content>
           <md-field>
             <md-input v-model="editCategoryName"></md-input>
@@ -40,27 +39,18 @@
         </md-dialog-content>
         <md-dialog-actions>
           <md-button @click="close">Отмена</md-button>
-          <md-button
-            class="md-primary"
-            @click="edit"
-          >Изменить</md-button>
+          <md-button class="md-primary" @click="edit">Изменить</md-button>
         </md-dialog-actions>
       </md-dialog>
 
-      <md-dialog
-        :md-active.sync="showDialogDel"
-        @md-closed="close"
-      >
+      <md-dialog :md-active.sync="showDialogDel" @md-closed="close">
         <md-dialog-title>Удалить категорию?</md-dialog-title>
         <md-dialog-content>
           Все содержащиеся в ней операции будут перемещены в категорию "Другое"
         </md-dialog-content>
         <md-dialog-actions>
           <md-button @click="close">Отмена</md-button>
-          <md-button
-            class="md-primary"
-            @click="del"
-          >Ok</md-button>
+          <md-button class="md-primary" @click="del">Ok</md-button>
         </md-dialog-actions>
       </md-dialog>
     </div>
@@ -86,7 +76,9 @@ export default {
 
   data: () => ({
     editCategoryName: null,
+    editCategoryType: null,
     deleteCategoryName: null,
+    deleteCategoryType: null,
     prevCategory: null,
     showDialogEdit: false,
     showDialogDel: false,
@@ -102,6 +94,7 @@ export default {
 
   methods: {
     openEdit(category) {
+      this.editCategoryType = category.categoryType;
       this.prevCategory = this.editCategoryName = category.name;
       this.color = category.color;
       this.showDialogEdit = true;
@@ -119,6 +112,7 @@ export default {
             name: this.editCategoryName.trim(),
             color: this.color,
           },
+          categoryType: this.editCategoryType,
         });
       this.close();
     },
@@ -127,14 +121,19 @@ export default {
         this.deleteCategoryName =
         this.color =
         this.prevCategory =
+        this.editCategoryType =
           null;
     },
-    openDel(name) {
+    openDel(name, categoryType) {
       this.deleteCategoryName = name;
+      this.deleteCategoryType = categoryType;
       this.showDialogDel = true;
     },
     del() {
-      this.$store.dispatch("deleteCategory", this.deleteCategoryName);
+      this.$store.dispatch("deleteCategory", {
+        name: this.deleteCategoryName,
+        type: this.deleteCategoryType,
+      });
       this.close();
     },
   },
